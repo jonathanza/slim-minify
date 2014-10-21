@@ -39,11 +39,13 @@ class Minify extends \Slim\Middleware
 
         $res  = $app->response();
 
-        $search = array('/\n/','/\>[^\S ]+/s','/[^\S ]+\</s','/(\s)+/s');
-        $replace = array(' ','>','<','\\1');
+        if ('text/html' == $res->headers->get('Content-Type')) {
+            $search = array('/\n/','/\>[^\S ]+/s','/[^\S ]+\</s','/(\s)+/s');
+            $replace = array(' ','>','<','\\1');
 
-        $minified_body = preg_replace($search, $replace, $res->body());
+            $minified_body = preg_replace($search, $replace, $res->body());
 
-        $res->body($minified_body);
+            $res->body($minified_body);
+        }
     }
 }
