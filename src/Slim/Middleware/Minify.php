@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-namespace Slim\Extras\Middleware;
+namespace Slim\Middleware;
 
 /**
  * Minify-Middleware is a summary of stackoverflow answers to reduce html traffic
@@ -32,21 +32,18 @@ namespace Slim\Extras\Middleware;
  * */
 class Minify extends \Slim\Middleware
 {
-	public function call()
-	{
-		$app  = $this->app;
-		$this->next->call();
+    public function call()
+    {
+        $app  = $this->app;
+        $this->next->call();
 
-		$res  = $app->response();
-		$squeezedHTML = $res->body();
+        $res  = $app->response();
 
-		$search = array('/\n/','/\>[^\S ]+/s','/[^\S ]+\</s','/(\s)+/s');
-		$replace = array(' ','>','<','\\1');
+        $search = array('/\n/','/\>[^\S ]+/s','/[^\S ]+\</s','/(\s)+/s');
+        $replace = array(' ','>','<','\\1');
 
-		$squeezedHTML = preg_replace($search, $replace, $body);
+        $minified_body = preg_replace($search, $replace, $res->body());
 
-		$res->body($squeezedHTML);
-	}
+        $res->body($minified_body);
+    }
 }
-
-?>
